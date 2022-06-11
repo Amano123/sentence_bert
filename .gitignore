@@ -1,2 +1,4 @@
 workspace/jsnli_1.1
 workspace/sentence_bert/__pycache__/*
+workspace/output/*
+!.gitkeep
