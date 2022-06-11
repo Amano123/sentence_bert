@@ -1,5 +1,4 @@
-#FROM --platform=linux/amd64 python:3.9.7
-FROM ubuntu:21.04
+FROM tensorflow/tensorflow:2.7.3-gpu
 LABEL maintainer="amano123"
 
 ARG USER_NAME
@@ -15,7 +14,7 @@ RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezo
 
 # サーバーを日本に変更
 # 多分早くなる
-RUN sed -i 's@archive.ubuntu.com@ftp.jaist.ac.jp/pub/Linux@g' /etc/apt/sources.list
+# RUN sed -i 's@archive.ubuntu.com@ftp.jaist.ac.jp/pub/Linux@g' /etc/apt/sources.list
 
 # #パッケージインストール
 RUN apt-get update \
@@ -28,8 +27,8 @@ RUN apt-get update \
                 iputils-ping \
 		locales  \
                 python3 \
-                python3-pip gcc \
-                build-essential libssl-dev libffi-dev python3-dev libpython3.9-dev
+                python3-pip \
+                gcc
                 
 # 日本語化
 # RUN locale-gen ja_JP.UTF-8 
@@ -49,7 +48,7 @@ RUN set -x \
 &&  groupmod -g ${GROUP_ID} ${USER_NAME} 
 
 # ディレクトリを指定
-USER ${USER_NAME}
+USER $USER_NAME
 
 # RUN pip install setuptools
 RUN python3 -m pip install pandas tqdm \
