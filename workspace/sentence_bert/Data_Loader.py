@@ -41,3 +41,18 @@ class JSNLI(object):
 
     def map_label(self, label):
         return self.get_labels()[label.strip().lower()]
+
+class poliinfo_uterance(object):
+    def __init__(self, folder_naem) -> None:
+        self.folder_name = folder_naem
+
+    def get_utterance(self, test_or_train: str, filename, max=0):
+        utterance = []
+        speaker = []
+        labels = []
+        with open(f"{self.folder_name}/{test_or_train}/{filename}", newline="") as f:
+            for line in csv.reader(f, delimiter='\t'):
+                utterance.append(line[2])
+                speaker.append(line[1])
+        return utterance, speaker
+ 
