@@ -2,3 +2,7 @@ workspace/jsnli_1.1
 workspace/sentence_bert/__pycache__/*
 workspace/output/*
 !.gitkeep
+workspace/poliinfo_utterance_dataset/*
+workspace/PoliInfo_dataclasses/__pycache__
+workspace/PoliInfo3-FormalRun-dataset/*
+workspace/test.txt
