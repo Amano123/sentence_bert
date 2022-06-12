@@ -31,9 +31,9 @@ test_diet_minutes: List[DProceedingObject] = test_all_minutes.diet
 
 # %%
 def make_local_utterance_dataset(local_minutes: List[LProceedingObject], train_or_test: str):
-    os.makedirs(f"poliinfo_utterance_dataset/{train_or_test}", exist_ok = True)
-    shutil.rmtree(f"poliinfo_utterance_dataset/{train_or_test}")
-    os.mkdir(f"poliinfo_utterance_dataset/{train_or_test}")
+    os.makedirs(f"poliinfo_utterance_dataset_test/{train_or_test}", exist_ok = True)
+    shutil.rmtree(f"poliinfo_utterance_dataset_test/{train_or_test}")
+    os.mkdir(f"poliinfo_utterance_dataset_test/{train_or_test}")
     for local_m in local_minutes:
         date = local_m.date
         proceeding = local_m.proceeding
@@ -41,11 +41,21 @@ def make_local_utterance_dataset(local_minutes: List[LProceedingObject], train_o
             speakerPosition = proc.speakerPosition
             speaker = proc.speaker
             utterance = proc.utterance
+            moneyExpressions = proc.moneyExpressions
+            relatedID = []
+            if moneyExpressions:
+                for mEx in moneyExpressions:
+                    if mEx.relatedID == None:
+                        continue
+                    relatedID.extend(mEx.relatedID)
+
             utterance = utterance.replace("\n", "")
             utterance = re.split("[，、。]", utterance)
-            with open(f"poliinfo_utterance_dataset/{train_or_test}/{date}.tsv", mode="a") as f:
+            with open(f"poliinfo_utterance_dataset_test/{train_or_test}/{date}.tsv", mode="a") as f:
                 for u in utterance:
-                    f.write(f"{speakerPosition}\t{speaker}\t{u}\n")
+                    if u == "":
+                        continue
+                    f.write(f"{speakerPosition}\t{speaker}\t{u}\t{list(set(relatedID))}\n")
 
 # %%
 make_local_utterance_dataset(train_local_minutes, "train")
