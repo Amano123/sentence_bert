@@ -42,7 +42,7 @@ files = os.listdir("/home/yo/workspace/poliinfo_utterance_dataset/train")
 #%%
 def main(date):
     utterance, speaker = poliinfo_reader.get_utterance("train", date+".tsv")
-    sentence_embeddings = model.encode(utterance, convert_to_tensor=True).cpu()
+    sentence_embeddings = model.encode(utterance, convert_to_tensor=True).cpu()  # type: ignore
     token_embeddings = model.encode(utterance, output_value="token_embeddings", convert_to_tensor=True)
     # sentence_embeddings = model.encode(utterance).tolist()  # type: ignore
     cls_token_embeddings = []
