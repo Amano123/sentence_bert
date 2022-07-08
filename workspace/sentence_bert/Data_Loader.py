@@ -53,6 +53,6 @@ class poliinfo_uterance(object):
         with open(f"{self.folder_name}/{test_or_train}/{filename}", newline="") as f:
             for line in csv.reader(f, delimiter='\t'):
                 utterance.append(line[2])
-                speaker.append(line[1])
+                speaker.append(f"{line[1]}:{line[0]}")
         return utterance, speaker
  

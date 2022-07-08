@@ -6,4 +6,14 @@ workspace/poliinfo_utterance_dataset/*
 workspace/PoliInfo_dataclasses/__pycache__
 workspace/PoliInfo3-FormalRun-dataset/*
 workspace/test.txt
+<<<<<<< HEAD
 workspace/話者毎に色分け-最終盤/*
+=======
+workspace/poliinfo_utterance_dataset_test/*
+workspace/Japanese_L-12_H-768_A-12_E-30_BPE/*
+workspace/runs/*
+workspace/t-sne/*
+workspace/発話毎に色付け/*
+workspace/*色付け/*
+workspace/話者毎に色付け.backup/*
+>>>>>>> develop
