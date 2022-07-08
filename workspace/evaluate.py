@@ -22,7 +22,7 @@ poliinfo_reader = Data_Loader.poliinfo_uterance("/home/yo/workspace/poliinfo_utt
 #%%
 utterance, speaker = poliinfo_reader.get_utterance("train", "2019-02-15.tsv")
 #%%
-utterance_embedding = model.encode(["1","2"], convert_to_tensor=True)
+utterance_embedding = model.encode(utterance, convert_to_tensor=True)
 # %%
 score_list = []
 for INDEX, w in enumerate(utterance_embedding):
@@ -30,20 +30,23 @@ for INDEX, w in enumerate(utterance_embedding):
         continue
     score = util.pytorch_cos_sim(utterance_embedding[INDEX], utterance_embedding[INDEX-1])
     score_list.append(score.cpu().item())
+
 # %%
-top_k=None
-if top_k:
-    top_k = min(top_k, len(utterance))
-else:
-    top_k = len(utterance)
-for query in queries:
-    query_embedding = model.encode(query, convert_to_tensor=True)
+%load_ext tensorboard
+import os
+logs_base_dir = "runs"
+os.makedirs(logs_base_dir, exist_ok=True)
+# %%
+import torch
+from torch.utils.tensorboard import SummaryWriter
+#%%
+import tensorflow as tf
+import tensorboard as tb
+#%%
+tf.io.gfile = tb.compat.tensorflow_stub.io.gfile
 
-    scores = util.pytorch_cos_sim(query_embedding, utterance_embedding)[0]
-    result = torch.topk(scores, k=top_k)
-
-    print("======")
-    print(f"Query: {query}")
-    for score, idx in zip(*result):
-        print(f"{score.item():.4f} {utterance[idx]}")
+summary_writer = SummaryWriter()
+summary_writer.add_embedding(mat=np.array(utterance_embedding.cpu()), metadata=speaker)
+# %%
+%tensorboard --logdir {logs_base_dir}
 # %%
