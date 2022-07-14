@@ -7,7 +7,7 @@ import itertools
 #%%
 # df = pd.read_pickle("/home/yo/workspace/話者毎に色分け-最終盤/2019-02-20/2019-02-20.pkl")
 # df = pd.read_pickle("/home/yo/workspace/話者毎に色付け/2019-02-25/2019-02-25.pkl")
-df = pd.read_pickle("/home/yo/workspace/話者毎に色付け/2020-02-20/2020-02-20.pkl")
+df = pd.read_pickle("/home/yo/workspace/話者毎に色付け-2022-07-07/2019-02-15/2019-02-15.pkl")
 
 # %%
 sentence_embeddings = df["sentence_embeddings"][0]
