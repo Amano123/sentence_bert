@@ -14,7 +14,7 @@ from sklearn.cluster import KMeans
 import collections
 #%%
 ## データセット指定
-date_str = "2019-02-20"
+date_str = "2019-02-25"
 df = pd.read_pickle(f"/home/yo/workspace/話者毎に色付け-2022-07-07/{date_str}/{date_str}.pkl")
 
 # %%
