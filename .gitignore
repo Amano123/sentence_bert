@@ -15,3 +15,6 @@ workspace/t-sne/*
 workspace/発話毎に色付け/*
 workspace/話者毎に色付け.backup/*
 /workspace/日付毎に色付け/*
+workspace/image/*
+workspace/speaker_utterance_dateset/*
+workspace/result/*

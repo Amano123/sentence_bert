@@ -9,6 +9,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 import collections
+from tqdm import tqdm
 #%%
 # df = pd.read_pickle("/home/yo/workspace/話者毎に色分け-最終盤/2019-02-20/2019-02-20.pkl")
 # df = pd.read_pickle("/home/yo/workspace/話者毎に色付け/2019-02-25/2019-02-25.pkl")
@@ -27,7 +28,7 @@ utterance = df["utterance"][0]
 topic_df = pd.read_csv(f"/home/yo/workspace/{date_str}-document_topic.csv")
 topic_df["document_topic"] = topic_df.iloc[:, 1:].idxmax(axis=1)
 
-
+topic_words_df = pd.read_csv(f"/home/yo/workspace/2019-02-20-k-2-topic-word.csv")
 
 
 #%%
@@ -116,6 +117,21 @@ def test_plot(df, data_tag):
         ax.legend(loc='center left', bbox_to_anchor=(1., .5))
     plt.savefig(f'{data_tag}-topic_top10.png', bbox_inches='tight')    
 
+def topic_word_plot(df, data_tag):
+    _df = df.copy()
+    fig, ax = plt.subplots(figsize=(8, 8))
+    topic_tag = ["topic1_flag", "topic2_flag"]
+    for index, tag in enumerate(topic_tag, 1):
+        xy_pickup = _df[_df[tag] == True]
+        # print(xy_pickup)
+        x = xy_pickup[0]
+        y = xy_pickup[1]
+        ax.scatter(x, y, s=20, label=f"topic {index}")   # type: ignore
+        ax.legend(loc='center left', bbox_to_anchor=(1., .5))
+        # for i, (_x, _y) in enumerate(zip(x, y)):
+        #     ax.annotate(str(i), (_x, _y))
+    plt.savefig(f'{data_tag}-topic_word.png', bbox_inches='tight', dpi=1000)    
+
 
 # %%
 plot_function(cls_tsne_emnedding_df, "CLS")
@@ -136,4 +152,43 @@ cls_topic_top10_df = topic_top10_plot_finction(cls_tsne_emnedding_df, topic1_ind
 # %%
 test_plot(sentence_top10_df, "sentence")
 test_plot(cls_topic_top10_df, "cls")
+# %%
+top_N_word = 1
+topic_1_word = topic_words_df.sort_values("topic_1", ascending=False).head(top_N_word)["token"].to_list()
+topic_2_word = topic_words_df.sort_values("topic_2", ascending=False).head(top_N_word)["token"].to_list()
+# %%
+import spacy
+nlp = spacy.load('ja_ginza')
+topic1_index = []
+topic2_index = []
+for index, u in tqdm(enumerate(utterance), total=len(utterance)):
+    doc = nlp(u)
+    tokens = [i.text for i in doc]
+    if any(map(topic_1_word.__contains__, tokens)):
+        topic1_index.append(index)
+    if any(map(topic_2_word.__contains__, tokens)):
+        topic2_index.append(index)
+#%%
+match_index = list(set(topic1_index) & set(topic2_index))
+for i in match_index:
+    topic1_index.remove(i)
+    topic2_index.remove(i)
+
+
+print("Topic 1")
+for index, t_i in enumerate(topic1_index):
+    print(f"{index}: {utterance[t_i]}")
+
+print("Topic 2")
+for index, t_i in enumerate(topic2_index):
+    print(f"{index}: {utterance[t_i]}")
+
+
+#%%
+# %%
+sentence_topic_word_df = topic_top10_plot_finction(sentence_tsne_emnedding_df, topic1_index, topic2_index)
+cls_topic_word_df = topic_top10_plot_finction(cls_tsne_emnedding_df, topic1_index, topic2_index)
+# %%
+topic_word_plot(sentence_topic_word_df, f"sentence_topic_word_N={top_N_word}-v2")
+topic_word_plot(cls_topic_word_df, f"cls_topic_word_N={top_N_word}-v2")
 # %%

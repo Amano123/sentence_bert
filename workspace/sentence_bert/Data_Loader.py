@@ -1,16 +1,16 @@
 
-import os
 import csv
+from typing import List
 from . import Input_Format
 
-class JSNLI(object):
+class Jsnli_Data_Format(object):
     """
     日本語SNLI(JSNLI)データセットをロードする関数
     """
-    def __init__(self, folder_name):
-        self.folder_name = folder_name
+    def __init__(self, folder_name: str):
+        self.folder_name: str = folder_name
 
-    def get_examples(self, file_name, max_examples=0):
+    def get_examples(self, file_name: str, max_examples=0):
         sentence1 = []
         sentence2 = []
         labels = []
@@ -21,10 +21,10 @@ class JSNLI(object):
                 sentence2.append(line[2])
 
         examples = []
-        id = 0
+        _id = 0
         for s1, s2, label in zip(sentence1, sentence2, labels):
-            guid = "%s-%d" % (file_name, id)
-            id += 1
+            guid = "%s-%d" % (file_name, _id)
+            _id += 1
             examples.append(Input_Format(guid=guid, texts=[s1, s2], label=self.map_label(label)))
 
             if 0 < max_examples <= len(examples):
@@ -42,7 +42,7 @@ class JSNLI(object):
     def map_label(self, label):
         return self.get_labels()[label.strip().lower()]
 
-class poliinfo_uterance(object):
+class Poliinfo_Uterance(object):
     def __init__(self, folder_naem) -> None:
         self.folder_name = folder_naem
 
