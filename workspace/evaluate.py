@@ -1,5 +1,4 @@
 #%%
-from ast import Index
 from datetime import datetime
 import math
 from torch.utils.data import DataLoader
@@ -17,7 +16,7 @@ import matplotlib.pyplot as plt
 #%%
 model = SentenceTransformer("/home/yo/workspace/output/training_nli_cl-tohoku/bert-base-japanese-whole-word-masking-2022-06-11_05-14-36")
 #%%
-poliinfo_reader = Data_Loader.poliinfo_uterance("/home/yo/workspace/poliinfo_utterance_dataset")
+poliinfo_reader = Data_Loader.Poliinfo_Uterance("/home/yo/workspace/poliinfo_utterance_dataset")
 
 #%%
 utterance, speaker = poliinfo_reader.get_utterance("train", "2019-02-15.tsv")

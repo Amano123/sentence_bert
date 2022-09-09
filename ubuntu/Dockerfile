@@ -8,9 +8,8 @@ ARG GROUP_ID
 ENV USER ${USER_NAME}
 ENV HOME /home/${USER}
 
-ENV TZ=Asia/Tokyo
-RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
-
+ENV https_proxy "http://wwwproxy.osakac.ac.jp:8080"
+ENV http_proxy "http://wwwproxy.osakac.ac.jp:8080"
 
 # サーバーを日本に変更
 # 多分早くなる
