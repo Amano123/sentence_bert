@@ -29,11 +29,13 @@ for f_name in os.listdir(dataset_file_path): #tqdm(os.listdir(dataset_file_path)
 
     cls_cos_matrix = cosine_similarity(digest_cls_embedding,assembly_cls_embedding)
     mean_cos_matrix = cosine_similarity(digest_mean_embedding,assembly_mean_embedding)
-
+    # cls token
     cls_match_assembly_speaker_name = []
     cls_match_assembly_utterance = []
+    # sentence-bert meaan
     mean_match_assembly_speaker_name = []
     mean_match_assembly_utterance = []
+
     for digest_index in digest_df.index:
         # print(f"{digest_df.speaker_name[digest_index]} : {digest_df.utterance[digest_index]}")
         cls_cos_score = cls_cos_matrix[digest_index].tolist()
@@ -52,8 +54,12 @@ for f_name in os.listdir(dataset_file_path): #tqdm(os.listdir(dataset_file_path)
     digest_df["mean_match_assembly_speaker_name"] = mean_match_assembly_speaker_name
     digest_df["mean_match_assembly_utterance"] = mean_match_assembly_utterance
 
-    cls_result = len(digest_df[digest_df.cls_match_assembly_speaker_name == digest_df.speaker_name]) / len(digest_df)
-    mean_result = len(digest_df[digest_df.mean_match_assembly_speaker_name == digest_df.speaker_name]) / len(digest_df)
+    cls_result = len(digest_df[
+        (digest_df.cls_match_assembly_speaker_name == digest_df.speaker_name) &
+        (digest_df.label == "policy.utterance")]) / len(digest_df[(digest_df.label == "policy.utterance")])
+    mean_result = len(digest_df[
+        (digest_df.mean_match_assembly_speaker_name == digest_df.speaker_name) & 
+        (digest_df.label == "policy.utterance")]) / len(digest_df[(digest_df.label == "policy.utterance")])
 
     del digest_df['cls_embedding']
     del digest_df['mean_embedding']
