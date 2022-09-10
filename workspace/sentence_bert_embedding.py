@@ -17,7 +17,7 @@ cls_model = SentenceTransformer(CLS_model_path)
 mean_model = SentenceTransformer(MEAN_model_paht)
 
 #%%
-dataset_file_path = "/home/yo/workspace/speaker_utterance_dateset"
+dataset_file_path = "/home/yo/workspace/speaker_utterance_dateset.v2"
 
 #%%
 def cls_model_embedding(df: DataFrame) -> DataFrame :
