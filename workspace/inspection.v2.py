@@ -41,8 +41,6 @@ for f_name in os.listdir(dataset_file_path): #tqdm(os.listdir(dataset_file_path)
     mean_match_assembly_speaker_name = []
     mean_match_assembly_utterance = []
 
-    bug_counter = 0
-
     for digest_index in digest_df.index:
         # print(f"{digest_df.speaker_name[digest_index]} : {digest_df.utterance[digest_index]}")
         cls_cos_score = cls_cos_matrix_df[cls_cos_matrix_df.index == digest_index].T
@@ -54,27 +52,27 @@ for f_name in os.listdir(dataset_file_path): #tqdm(os.listdir(dataset_file_path)
         # print(filter_name)
         filter_df = assembly_df[(assembly_df.speaker_name == filter_name)].reset_index()
         # print(filter_df)
-        if len(set(filter_df.label)) > 1:
-            filter_id = list(set(filter_df.label))
-        else:
-            try:
-                filter_id = [filter_df.label[0], filter_df.label[0]+1, filter_df.label[0]-1]
-            except:
-                bug_counter += 1
-                
-                filter_name = "aaaa"
-                cls_match_assembly_speaker_name.append(filter_name)
-                cls_match_assembly_utterance.append(filter_name)
-                mean_match_assembly_speaker_name.append(filter_name)
-                mean_match_assembly_utterance.append(filter_name)
-                continue
+        filter_id = []
 
-        # print(filter_id)
-        # print(set(filter_df.label))
-        # print(set(filter_df.speaker_name))
-        # print(set(filter_df.index))
+        if set(filter_df.label) == set():
+            filter_name = "aaaa"
+            cls_match_assembly_speaker_name.append(filter_name)
+            cls_match_assembly_utterance.append(filter_name)
+            mean_match_assembly_speaker_name.append(filter_name)
+            mean_match_assembly_utterance.append(filter_name)
+            continue
+
+        for label in set(filter_df.label):
+            filter_id.append(label)
+            filter_id.append(label + 1)
+            filter_id.append(label - 1)
+            # filter_id.append(label + 2)
+            # filter_id.append(label - 2)
+            
 
         test = assembly_df[assembly_df.label.isin(filter_id)].index
+        # 発言者の制限をかけない場合
+        # test = assembly_df.index
         # print(test)
 
         # cls_max_index = cls_cos_score.index(max(cls_cos_score))
@@ -90,7 +88,9 @@ for f_name in os.listdir(dataset_file_path): #tqdm(os.listdir(dataset_file_path)
         mean_match_assembly_speaker_name.append(assembly_df.speaker_name[mean_max_index].to_string(index=False))
         mean_match_assembly_utterance.append(assembly_df.utterance[mean_max_index].to_string(index=False))
 
+
         # break
+        # print()
     # break
 
     digest_df["cls_match_assembly_speaker_name"] = cls_match_assembly_speaker_name
@@ -100,11 +100,14 @@ for f_name in os.listdir(dataset_file_path): #tqdm(os.listdir(dataset_file_path)
     # break
 
     cls_result = len(digest_df[
-        (digest_df.cls_match_assembly_speaker_name == digest_df.speaker_name) &
-        (digest_df.label == "policy.utterance")]) / len(digest_df[(digest_df.label == "policy.utterance")])
+        (digest_df.cls_match_assembly_speaker_name == digest_df.speaker_name) & 
+        (digest_df.label == "speaker.summury")
+        ]) / len(digest_df[(digest_df.label == "speaker.summury")])
+
     mean_result = len(digest_df[
         (digest_df.mean_match_assembly_speaker_name == digest_df.speaker_name) & 
-        (digest_df.label == "policy.utterance")]) / len(digest_df[(digest_df.label == "policy.utterance")])
+        (digest_df.label == "speaker.summury")
+        ]) / len(digest_df[(digest_df.label == "speaker.summury")])
 
     del digest_df['cls_embedding']
     del digest_df['mean_embedding']
@@ -112,4 +115,4 @@ for f_name in os.listdir(dataset_file_path): #tqdm(os.listdir(dataset_file_path)
     print(f"{f_name:20}: cls: [{cls_result:.5%}], mean: [{mean_result:.5%}]")
 
 
-# %%
+ # %%
