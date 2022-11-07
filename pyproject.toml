@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "workspace"
+version = "0.1.0"
+description = ""
+authors = ["yoo <mi21a001@oecu.jp>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.9.5"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
